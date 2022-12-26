@@ -34,3 +34,13 @@
                     - 계수 : w⑴, w⑵, ...., w⒫
                     - 절편 : w0
 '''
+
+import numpy as np
+# 사이킷런을 코드에 가져오기 위해서 sklearn이라는 이름으로 가져와야 함
+# 선형 회귀를 구현하기 위해서 linear_model을 import
+from sklearn import linear_model
+
+# LinearRegression() 생성자를 통해 선형 회귀 모델()을 생성함
+regr = linear_model.LinearRegression()
+
+# 입력 데이터 집합 X
