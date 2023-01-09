@@ -1,52 +1,98 @@
+'''
+    * 텐서(tensor)
+        - 배열(array)이나 행렬(matrix)과 매우 유사한 특수한 자료구조
+'''
+# list로부터 tensor 생성하기
 import torch
-from torch import nn
-from torch.utils.data import DataLoader
-from torchvision import datasets
-from torchvision.transforms import ToTensor, Lambda, Compose
-import matplotlib.pyplot as plt
 import numpy as np
 
-# MNIST Data down 받기
-# 공개 데이터셋에서 학습 데이터를 내려받기
-training_data = datasets.MNIST(
-    root = 'data',  # 폴더명
-    train = True,   # 학습데이터인지 아닌지 true = 마즘, false = 아님
-    download=True,
-    transform= ToTensor(), # 전처리를 해 쓸 수 있게 하겠다
-)
+data = [[1,2], [3,4]]
+x_data = torch.tensor(data)
+print(x_data)
 
-test_data = datasets.MNIST(
-    root = 'data',
-    train = False,   # 학습데이터인지 아닌지 true = 마즘, false = 아님
-    download=True,
-    transform= ToTensor(), # 전처리를 해 쓸 수 있게 하겠다
-)
+# numpy array로부터 tensor 생성하기    -> copy본 생성
+np_array = np.array(data)
+x_np_1 = torch.tensor(np_array)
+print(x_np_1)
 
-'''
-    데이터 준비  (DataLoader 사용)
-        1) torch.utils.data import DataLoader
-            데이터로더 (DataLoader) 객체
-                - 학습에 사용될 데이터 전체를 보관했다가 
-                - 모델 학습을 할 때 배치 크기만큼 데이터를 꺼내서 사용
-        2) 내부적으로 반복자(iterator)에 포함된 인덱스를 이용해 배치 크기만큼 반환함
-'''
-batch_size = 64
+x_np_2 = torch.as_tensor(np_array)  # -> view를 만듦
+print(x_np_2)
 
-# 데이터로더 생성
-train_dataloader = DataLoader(training_data, batch_size=batch_size)   # 학습
-test_dataloader = DataLoader(test_data, batch_size=batch_size)   # 테스트
+x_np_3 = torch.as_tensor(np_array)  # -> view를 만듦
+print(x_np_3)
 
-for X, y in test_dataloader:
-    print("Shape of X : ", X.shape)
-    print("Shape of y : ", y.shape, y.dtype)
-    break
+x_np_1[0,0] = 5 # copy본 수정
+print(x_np_1)
 
-# 학습에 사용할 CPU/GPU 장치를 얻기
+# original 확인
+print(np_array)
+# 변하지 않음 -> np_1는 말 그대로 copy가 된 것
 
-# 모델을 정의 (클래스)
+# 나머지 확인
+print(x_np_2)
+print(x_np_3)
+# 2,3는 copy본이 수정됨에 따라 변하지 않고 원본을 따라감
 
-# Loss 함수, Optimizer 설정
+x_np_4 = torch.from_numpy(np_array)
+print(x_np_4)
 
-# Training을 위한 함수
+print("---------------------------------------------------")
+np_again = x_np_1.numpy()
+print(np_again, type(np_again))
 
-# Test를 위한 함수
+print("---------------------------------------------------")
+a = torch.ones(2,3) #1로만 채움
+print(a)
+
+b = torch.zeros(2,3)    #0으로만 채움
+print(b)
+
+c = torch.full((2,3), 2)    #,뒤의 숫자로만 채움
+print(c)
+
+d = torch.empty(2,3)    #초기화가 안된 경우 여러 값이 나올 수 있음
+print(d)
+
+print("------------------------------------")
+e = torch.arange(10)
+print(e)
+
+f = torch.rand(2,2) # 0과 1 사이의 숫자를 균등하게 생성
+print(f)
+
+g = torch.randn(2,2)    # -값도 포함
+print(g)
+
+print("========================================")
+a = torch.arange(1, 13).reshape(3,4)
+print(a)
+
+#indexing
+print(a[1])
+print(a[0, -1])
+
+#slicing --- (?)
+print(a[1:-1])
+print(a[0:-1])
+print(a[0:0])
+print(a[0:1])
+print(a[:2, 2:])    # 첫번째행, 두번째행까지의 모든 행과 세번째 이후의 모든 열
+print(a[2:-1])
+
+x = torch.tensor([[1,2], [3,4]], dtype=torch.float32)
+y = torch.tensor([[5,6], [7,8]], dtype=torch.float32)
+# print(x)
+# print(y)
+# print("===========----------------=================------------------")
+# print("x+y : ", x+y)
+# print("x-y : ", x-y)
+# print("x*y : ", x*y)
+# print("x/y : ", x/y)
+print("x@y : ", x@y)
+print('='*30)
+print(torch.add(x,y))
+print(torch.subtract(x,y))
+print(torch.multiply(x,y))
+print(torch.divide(x,y))
+print(torch.matmul(x,y))
+
